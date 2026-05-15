@@ -1,0 +1,22 @@
+name: Notify Zapier on PR
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send PR data to Zapier
+        run: |
+          curl -X POST "${{ secrets.ZAPIER_WEBHOOK }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "repository": "test-repo",
+            "title": "Test Pull Request",
+            "url": "https://github.com/test/repo/pull/1",
+            "author": "Sasidula"
+          }'
