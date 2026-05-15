@@ -15,23 +15,37 @@ jobs:
           LOG_FILE=zapier-log.txt
 
           echo "Starting Zapier notification..." | tee -a $LOG_FILE
-          echo "Repository: test-repo" | tee -a $LOG_FILE
-          echo "PR Title: Test Pull Request" | tee -a $LOG_FILE
-          echo "PR URL: https://github.com/test/repo/pull/1" | tee -a $LOG_FILE
-          echo "Author: Sasidula" | tee -a $LOG_FILE
+          echo "Repository: ${{ github.repository }}" | tee -a $LOG_FILE
+          echo "PR Title: ${{ github.event.pull_request.title }}" | tee -a $LOG_FILE
+          echo "PR URL: ${{ github.event.pull_request.html_url }}" | tee -a $LOG_FILE
+          echo "Author: ${{ github.event.pull_request.user.login }}" | tee -a $LOG_FILE
+          echo "PR Number: ${{ github.event.pull_request.number }}" | tee -a $LOG_FILE
+          echo "Source Branch: ${{ github.head_ref }}" | tee -a $LOG_FILE
+          echo "Target Branch: ${{ github.base_ref }}" | tee -a $LOG_FILE
 
-          RESPONSE=$(curl -s -o response.txt -w "%{http_code}" -X POST "${{ secrets.ZAPIER_WEBHOOK }}" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "repository": "test-repo",
-            "title": "Test Pull Request",
-            "url": "https://github.com/test/repo/pull/1",
-            "author": "Sasidula"
-          }')
+          RESPONSE=$(curl -s -o response.txt -w "%{http_code}" \
+            -X POST "${{ secrets.ZAPIER_WEBHOOK }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "repository": "${{ github.repository }}",
+              "title": "${{ github.event.pull_request.title }}",
+              "url": "${{ github.event.pull_request.html_url }}",
+              "author": "${{ github.event.pull_request.user.login }}",
+              "pr_number": "${{ github.event.pull_request.number }}",
+              "source_branch": "${{ github.head_ref }}",
+              "target_branch": "${{ github.base_ref }}"
+            }')
 
           echo "HTTP Status: $RESPONSE" | tee -a $LOG_FILE
           echo "Response Body:" | tee -a $LOG_FILE
           cat response.txt | tee -a $LOG_FILE
+
+          if [ "$RESPONSE" -ge 200 ] && [ "$RESPONSE" -lt 300 ]; then
+            echo "Zapier notification sent successfully." | tee -a $LOG_FILE
+          else
+            echo "Failed to send Zapier notification." | tee -a $LOG_FILE
+            exit 1
+          fi
 
       - name: Upload logs
         uses: actions/upload-artifact@v4
