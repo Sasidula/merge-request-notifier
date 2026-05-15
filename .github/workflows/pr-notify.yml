@@ -12,11 +12,29 @@ jobs:
     steps:
       - name: Send PR data to Zapier
         run: |
-          curl -X POST "${{ secrets.ZAPIER_WEBHOOK }}" \
+          LOG_FILE=zapier-log.txt
+
+          echo "Starting Zapier notification..." | tee -a $LOG_FILE
+          echo "Repository: test-repo" | tee -a $LOG_FILE
+          echo "PR Title: Test Pull Request" | tee -a $LOG_FILE
+          echo "PR URL: https://github.com/test/repo/pull/1" | tee -a $LOG_FILE
+          echo "Author: Sasidula" | tee -a $LOG_FILE
+
+          RESPONSE=$(curl -s -o response.txt -w "%{http_code}" -X POST "${{ secrets.ZAPIER_WEBHOOK }}" \
           -H "Content-Type: application/json" \
           -d '{
             "repository": "test-repo",
             "title": "Test Pull Request",
             "url": "https://github.com/test/repo/pull/1",
             "author": "Sasidula"
-          }'
+          }')
+
+          echo "HTTP Status: $RESPONSE" | tee -a $LOG_FILE
+          echo "Response Body:" | tee -a $LOG_FILE
+          cat response.txt | tee -a $LOG_FILE
+
+      - name: Upload logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: zapier-logs
+          path: zapier-log.txt
