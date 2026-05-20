@@ -27,7 +27,6 @@ In [Zapier](https://zapier.com):
 3. Choose **Catch Hook** event
 
 ![Zapier Webhook Setup](./images/01-zapier-webhook-setup.png)  
-*Replace with: Screenshot showing Zapier Webhooks by Zapier trigger selection and "Catch Hook" event*
 
 4. Click Continue
 5. Zapier generates a webhook URL like:
@@ -36,7 +35,6 @@ In [Zapier](https://zapier.com):
    ```
 
 ![Zapier Webhook URL](./images/02-zapier-webhook-url.png)  
-*Replace with: Screenshot showing the generated webhook URL in Zapier (with the actual URL visible)*
 
 **Copy this URL** — you'll need it in Step 3.
 
@@ -52,12 +50,10 @@ Back in Zapier, set up the action:
 4. Connect your Google account
 
 ![Google Chat Setup](./images/03-google-chat-setup.png)  
-*Replace with: Screenshot showing Google Chat action selection in Zapier*
 
 5. Select your Chat Space
 
 ![Select Chat Space](./images/04-select-chat-space.png)  
-*Replace with: Screenshot showing the Google Chat space selection dropdown*
 
 6. Configure the message format:
 
@@ -79,12 +75,10 @@ Map the webhook fields to message placeholders:
 - `{{url}}` ← from webhook `url`
 
 ![Google Chat Message Template](./images/05-google-chat-message-template.png)  
-*Replace with: Screenshot showing the message template in Google Chat with field mappings*
 
 7. Save and turn on your Zap
 
 ![Google Chat Message Preview](./images/06-google-chat-message-preview.png)  
-*Replace with: Screenshot of the actual Google Chat message that will be sent with all the PR details*
 
 ---
 
@@ -97,14 +91,12 @@ Secure your webhook URL in GitHub:
 3. Click **New repository secret**
 
 ![GitHub Secrets Settings](./images/07-github-secrets-settings.png)  
-*Replace with: Screenshot showing GitHub repository settings → Secrets and variables → Actions*
 
 4. Create a new secret:
    - **Name:** `ZAPIER_WEBHOOK`
    - **Value:** Paste the webhook URL from Step 1
 
 ![GitHub New Secret](./images/08-github-new-secret.png)  
-*Replace with: Screenshot showing the "New repository secret" form with ZAPIER_WEBHOOK name field*
 
 ---
 
@@ -199,7 +191,6 @@ You can test the workflow manually:
 4. Choose your branch and click **Run workflow**
 
 ![GitHub Actions Manual Trigger](./images/09-github-actions-manual-trigger.png)  
-*Replace with: Screenshot showing the Actions tab with "Notify Zapier on PR" workflow and Run workflow button*
 
 ### View Logs
 
